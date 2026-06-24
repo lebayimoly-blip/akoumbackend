@@ -3,13 +3,13 @@ const nodemailer = require("nodemailer");
 
 const router = express.Router();
 
-// Config transport email (exemple Gmail)
+// Configuration du transport SMTP (exemple Gmail)
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "tonemail@gmail.com",      // à remplacer
-    pass: "tonmotdepasse"            // à remplacer ou utiliser App Password
-  }
+    user: process.env.lebayimoly@gmail.com, // 
+    pass: process.env.fwqa wjzs asad hngq, // mot de passe d'application (App Password)
+  },
 });
 
 router.post("/", async (req, res) => {
@@ -17,14 +17,15 @@ router.post("/", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: email,
-      to: "Akoumdor@gmail.com", // destinataire ONG
+      from: `"${name}" <${email}>`, // expéditeur
+      to: process.env.EMAIL_RECEIVER || "lebayimoly@gmail.com", // destinataire ONG
       subject: `Nouveau message de ${name}`,
-      text: message
+      text: `Nom: ${name}\nEmail: ${email}\nMessage:\n${message}`,
     });
 
     res.json({ success: true, message: "Message envoyé avec succès !" });
   } catch (error) {
+    console.error("Erreur envoi email:", error);
     res.status(500).json({ success: false, message: "Erreur envoi email", error });
   }
 });
